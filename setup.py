@@ -7,7 +7,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'pytorch2caffe'
-DESCRIPTION = 'A module to convert pytorch model to caffe model.'
+DESCRIPTION = 'A package to convert pytorch model to caffe model'
 URL = 'https://github.com/woodsgao/pytorch2caffe'
 EMAIL = 'woodsgao@outlook.com'
 AUTHOR = 'woodsgao'
@@ -17,8 +17,8 @@ VERSION = '0.1.0'
 # What packages are required for this module to be executed?
 REQUIRED = [
     # 'requests', 'maya', 'records',
-    'torch>=1.1',
-    'numpy>=1.16',
+    'torch>=1.0',
+    'numpy>=1.11',
 ]
 
 # What packages are optional?

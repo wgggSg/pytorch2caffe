@@ -1,6 +1,18 @@
 # pytorch2caffe
 
-A module to convert pytorch model to caffe model. 
+A package to convert pytorch model to caffe model. 
+
+## Installation
+
+`pip3 install pytorch2caffe`
+
+or
+
+```
+git clone https://github.com/woodsgao/pytorch2caffe
+cd pytorch2caffe
+python3 setup.py install
+```
 
 ## Tutorials
 
