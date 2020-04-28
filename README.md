@@ -2,6 +2,12 @@
 
 A package to convert pytorch model to caffe model. 
 
+## Note
+
+This package supports `F.interpolate` with `mode='bilinear` argument.
+It depends on caffe with `Interp` layer.
+See [woodsgao/caffe](https://github.com/woodsgao/caffe)
+
 ## Installation
 
 `pip3 install pytorch2caffe`
