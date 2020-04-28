@@ -1,11 +1,14 @@
+import traceback
+
+import numpy as np
 import torch
 import torch.nn as nn
-import traceback
-from . import caffe_net, layer_param
 import torch.nn.functional as F
 from torch.autograd import Variable
 from torch.nn.modules.utils import _pair
-import numpy as np
+
+from . import caffe_net, layer_param
+
 """
 How to support a new layer type:
  layer_name=log.add_layer(layer_type_name)
