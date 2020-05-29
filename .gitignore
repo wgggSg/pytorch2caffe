@@ -15,6 +15,7 @@ runs/
 tmp/
 weights/
 .vscode/
+.idea/
 data/
 core/
 *.png
