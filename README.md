@@ -32,8 +32,7 @@ layer{
     }
 }
 ```
-See [**jnulzl/caffe_plus**](https://github.com/jnulzl/caffe_plus)
-- 
+See [**jnulzl/caffe_plus**](https://github.com/jnulzl/caffe_plus) 
 
 ## Installation
 
