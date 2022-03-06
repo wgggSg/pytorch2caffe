@@ -564,31 +564,14 @@ def _interpolate(raw,
     # for nearest _interpolate
 
     x = raw(input, size, scale_factor, mode)
-    if mode == "nearest" and align_corners == None:
-        layer_name = log.add_layer(name='upsample')
-        top_blobs = log.add_blobs([x], name='upsample_blob'.format(type))
-        layer = caffe_net.Layer_param(name=layer_name,
-                                      type='Upsample',
-                                      bottom=[log.blobs(input)],
-                                      top=top_blobs)
-
-        layer.upsample_param(size=(input.size(2), input.size(3)),
-                             scale_factor=scale_factor)
-        log.cnet.add_layer(layer)
-    else:
-        layer_name = log.add_layer(name='interp')
-        top_blobs = log.add_blobs([x], name='interp_blob'.format(type))
-        layer = caffe_net.Layer_param(name=layer_name,
-                                      type='Interp',
-                                      bottom=[log.blobs(input)],
-                                      top=top_blobs)
-
-        # layer.upsample_param(size =(input.size(2),input.size(3)), scale_factor= scale_factor)
-        layer.param.interp_param.height = x.size(2)
-        layer.param.interp_param.width = x.size(3)
-        log.cnet.add_layer(layer)
-    # else:
-    # raise NotImplementedError("not implement F.interpolate totoaly")
+    layer_name = log.add_layer(name='upsample')
+    top_blobs = log.add_blobs([x], name='upsample_blob'.format(type))
+    layer = caffe_net.Layer_param(name=layer_name,
+                                    type='Upsample',
+                                    bottom=[log.blobs(input)],
+                                    top=top_blobs)
+    layer.upsample_param(size=size, scale_factor=scale_factor, mode=mode)
+    log.cnet.add_layer(layer)
     return x
 
 
@@ -884,7 +867,7 @@ def _expand_as(input, *args):
     # only support expand A(1, 1, H, W) to B(1, C, H, W)
 
     x = raw__expand_as__(input, *args)
-    layer_name = log.add_layer(name="expand_as", with_num=True)
+    layer_name = log.add_layer(name="expand_as")
     log.add_blobs([x], name='expand_as_blob')
     layer = caffe_net.Layer_param(name=layer_name,
                                   type='Convolution',

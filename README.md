@@ -4,17 +4,41 @@ A package to convert pytorch model to caffe model.
 
 ## Note
 
-This package supports `F.interpolate` with `mode='bilinear` argument.
-It depends on caffe with `Interp` layer.
-See [woodsgao/caffe](https://github.com/woodsgao/caffe)
+- This package supports `F.interpolate` with `mode='bilinear'` argument and `scale_factor` argument.
+It depends on caffe with `Upsample` layer as follows:
+```
+# argument height and width
+layer{
+    name:"Upsample_nearest"
+    type:"Upsample"
+    bottom:"Conv2d_87" #Blob Conv2d_87's shape is [1,16,32,32]
+    top:"Upsample_nearest" #Blob Upsample_nearest's shape is [1,16,HEIGHT,WIDTH]
+    upsample_param{
+        mode: NEAREST # or BILINEAR
+        height: HEIGHT
+        width: WIDTH
+    }
+}
+# argument height_scale and width_scale
+layer{
+    name:"Upsample_nearest"
+    type:"Upsample"
+    bottom:"Conv2d_87" #Blob Conv2d_87's shape is [1,16,32,32]
+    top:"Upsample_nearest" #Blob Upsample_nearest's shape is [1,16,32*HEIGHT_SCALE,32*WIDTH_SCALE]
+    upsample_param{
+        mode: NEAREST # or BILINEAR
+        height_scale: HEIGHT_SCALE
+        width_scale: WIDTH_SCALE
+    }
+}
+```
+See [**jnulzl/caffe_plus**](https://github.com/jnulzl/caffe_plus)
+- 
 
 ## Installation
 
-`pip3 install pytorch2caffe`
 
-or
-
-    git clone https://github.com/woodsgao/pytorch2caffe
+    git clone https://github.com/wgggSg/pytorch2caffe
     cd pytorch2caffe
     python3 setup.py install
 

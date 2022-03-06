@@ -33,10 +33,13 @@ class Layer_param():
         self.name = self.param.name = name
         self.type = self.param.type = type
 
-        # if top is None:
-        #     top = ['None']
-        # if bottom is None:
-        #     bottom = ['None']
+        # if None in top:
+        #     print('{} no top {}.'.format(name, top))
+        #     top = list(filter(None, top))
+        # if None in bottom:
+        #     print('{} no bottom {}.'.format(name, bottom))
+        #     bottom = list(filter(None, bottom))
+            
         print(top, bottom)
         self.top = self.param.top
         self.top.extend(top)
@@ -164,34 +167,55 @@ class Layer_param():
             bn_param.eps = eps
         self.param.batch_norm_param.CopyFrom(bn_param)
 
-    # layer
-    # {
-    #     name: "upsample_layer"
-    #     type: "Upsample"
-    #     bottom: "some_input_feature_map"
-    #     bottom: "some_input_pool_index"
-    #     top: "some_output"
-    #     upsample_param {
-    #         upsample_h: 224
-    #         upsample_w: 224
+    # layer{
+    #     name:"Upsample_nearest"
+    #     type:"Upsample"
+    #     bottom:"Conv2d_87" #Blob Conv2d_87's shape is [1,16,32,32]
+    #     top:"Upsample_nearest" #Blob Upsample_nearest's shape is [1,16,HEIGHT,WIDTH]
+    #     upsample_param{
+    #         mode: NEAREST # or BILINEAR
+    #         height: HEIGHT
+    #         width: WIDTH
     #     }
     # }
-    def upsample_param(self, size=None, scale_factor=None):
+    
+    # layer{
+    #     name:"Upsample_nearest"
+    #     type:"Upsample"
+    #     bottom:"Conv2d_87" #Blob Conv2d_87's shape is [1,16,32,32]
+    #     top:"Upsample_nearest" #Blob Upsample_nearest's shape is [1,16,32*HEIGHT_SCALE,32*WIDTH_SCALE]
+    #     upsample_param{
+    #         mode: NEAREST # or BILINEAR
+    #         height_scale: HEIGHT_SCALE
+    #         width_scale: WIDTH_SCALE
+    #     }
+    # }
+    def upsample_param(self, size=None, scale_factor=None, mode='nearest'):
         upsample_param = pb.UpsampleParameter()
+        if str.lower(mode) == 'nearest':
+            upsample_param.mode = 0
+        else:
+            upsample_param.mode = 1
         if scale_factor:
             if isinstance(scale_factor, int):
-                upsample_param.scale = scale_factor
+                upsample_param.height_scale = scale_factor
+                upsample_param.width_scale = scale_factor
+            elif isinstance(scale_factor, float):
+                print('warning: Upsample scale_factor{}\'s type will be convert to int or long.'.format(scale_factor))
+                scale_factor = int(scale_factor)
+                upsample_param.height_scale = scale_factor
+                upsample_param.width_scale = scale_factor
             else:
-                upsample_param.scale_h = scale_factor[0]
-                upsample_param.scale_w = scale_factor[1]
+                upsample_param.height_scale = scale_factor[0]
+                upsample_param.width_scale = scale_factor[1]
 
-        if size:
+        elif size:
             if isinstance(size, int):
-                upsample_param.upsample_h = size
+                upsample_param.height = size
+                upsample_param.width = size
             else:
-                upsample_param.upsample_h = size[0] * scale_factor
-                upsample_param.\
-                    upsample_w = size[1] * scale_factor
+                upsample_param.height = size[0]
+                upsample_param.width = size[1]
         self.param.upsample_param.CopyFrom(upsample_param)
 
     def add_data(self, *args):
